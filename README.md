@@ -11,15 +11,15 @@
 
 ##### DOM Element onClick
 
-##### const [titleToChange, setNewTitleFunction] = useState('');
+#### const [titleToChange, setNewTitleFunction] = useState('');
 
 setNewTitleFunction('New Title');
 
 ##### onAddExpenseData={addExpenseDataHandler}
 
-##### Lifting State Up
+#### Lifting State Up
 
-##### Rendering List & Conditionnal content
+#### Rendering List & Conditionnal content
 key={expense.id}
 
 # Styling Components
@@ -30,7 +30,7 @@ key={expense.id}
 
 ##### color : ${props => props.invalid ? 'black': 'red'};
 
-##### CSS modules <div className={`${styles["form-control"]} ${!isValid && styles.invalid}`}>
+### CSS modules <div className={`${styles["form-control"]} ${!isValid && styles.invalid}`}>
 
 ### Debugging errors
 
