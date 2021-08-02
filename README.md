@@ -20,10 +20,10 @@
 - Using React DevTools
 
 ## 6 - Fragments, Portals, Refs
-- Jsx Limitations & Fragments
+- Jsx Limitations & Fragments  
 Wrapper React.Fragment
 
-- Cleaner Dom with Portals
+- Cleaner Dom with Portals  
 backdrop-root
 
 -Refs  
