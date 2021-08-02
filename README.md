@@ -31,7 +31,24 @@
 	const enteredName = inputNameRef.current.value;  
 	###### useRef -> uncontrolledComponent(using DOM by Ref) | useState -> controlledComponent(use props and callbackFunc like onChange)
 
+## 7 - Effects, Reducers & Context
+- Effects & Side Effects  
+Dibounce
+	useEffect(() => {  
+		const identifier = setTimeout(() => {  
+			console.log("Checking form validity!");  
+			setFormIsValid(enteredEmail.includes("@") && enteredPassword.trim().length > 6);  
+		}, 1000);  
+		return () => {  
+			console.log("Clean up");  
+			clearTimeout(identifier);  
+		};  
+	}, [enteredEmail, enteredPassword]);
 
+
+
+- Managing Complex States with Reducers
+- Managing App/Component-wide with Context
 
 
 
