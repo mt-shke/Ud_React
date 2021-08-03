@@ -135,6 +135,8 @@ export const AuthContextProvider = (props) => {
 
 
 
+	<details><summary> ### Things I've learned </summary>  
+		
 #### props.items
 
     		<Expense items={expenses} />
@@ -159,6 +161,8 @@ setNewTitleFunction('New Title');
 ##### Outputting Dynamic List of Content
 
 ##### Rendering Content Under Certain Conditions
+		
+	</details>
 
 
 
