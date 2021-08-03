@@ -88,8 +88,40 @@ useEffect(() => {
 ```  
 </details>  
   
-- Managing App/Component-wide with Context
+<detalils> <summary>- Managing App/Component-wide with Context</summary>
+```js 
+const AuthContext = React.createContext({
+	isLoggedIn: false,
+	onLogout: () => {},
+	onLogin: (email, password) => {},
+});
 
+export const AuthContextProvider = (props) => {
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
+		if (storedUserLoggedInInformation === "1") setIsLoggedIn(true);
+	}, []);
+
+	const logoutHandler = () => {
+		localStorage.removeItem("isLoggedIn");
+		setIsLoggedIn(false);
+	};
+	const logintHandler = () => {
+		localStorage.setItem("isLoggedIn", "1");
+		setIsLoggedIn(true);
+	};
+
+	return (
+		<AuthContext.Provider value={{ isLoggedIn: isLoggedIn, onLogout: logoutHandler, onLogin: logintHandler }}>
+			{props.children}
+		</AuthContext.Provider>
+	);
+};  
+```  
+</details>  
+  
 
 
 
