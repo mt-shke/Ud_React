@@ -135,8 +135,8 @@ export const AuthContextProvider = (props) => {
 
 
 
-	<details>  
-		
+<details>  
+
 <summary> ### Things I've learned </summary>  
 		
 #### props.items
