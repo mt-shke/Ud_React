@@ -34,7 +34,7 @@
 ## 7 - Effects, Reducers & Context
 
 <details>
-	<summary>- **Effects** & Side Effects  </summary>  
+	<summary>- Effects & Side Effects  </summary>  
   
 ```js
 	useEffect(() => {  
@@ -53,7 +53,7 @@
   
 
 <details>
-	<summary>- Managing Complex States with **Reducers** </summary>  
+	<summary>- Managing Complex States with Reducers </summary>  
   
 ```js
 	const emailReducer = (state, action) => {  
@@ -97,7 +97,7 @@ useEffect(() => {
   
 
 <details>
-	<summary>- Managing App/Component-wide with **Context**, & ImperativeHandle with useRef  </summary>  
+	<summary>- Managing App/Component-wide with Context, & imperativeHandle with useRef  </summary>  
   
 ```js
 const AuthContext = React.createContext({
