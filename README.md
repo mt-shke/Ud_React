@@ -89,7 +89,7 @@ useEffect(() => {
 </details>  
   
 
-	<details>
+<details>
 	<summary>- Managing App/Component-wide with Context  </summary>  
   
 ```js
