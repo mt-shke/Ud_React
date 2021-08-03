@@ -45,7 +45,9 @@ Dibounce
 		};  
 	}, [enteredEmail, enteredPassword]);
 
-<details><summary>- Managing Complex States with Reducers </summary>
+<details>
+	<summary>- Managing Complex States with Reducers </summary>
+	
 ```js
 	const emailReducer = (state, action) => {  
 		if (action.type === "USER_INPUT") {  
@@ -83,7 +85,8 @@ useEffect(() => {
 	};
 	
 	return (<input type="email" id="email" value={emailState.value} onChange={emailChangeHandler} onBlur={validateEmailHandler}
-		       ``` </details>
+		       ``` 
+		       </details>
 
 
 - Managing App/Component-wide with Context
