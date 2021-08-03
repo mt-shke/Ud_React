@@ -130,8 +130,25 @@ export const AuthContextProvider = (props) => {
 	);
 };  
 ```  
+	
+```js	
+// ImperativeHandle / useRef to call method from parent element via ref
+	
+import React, { useEffect, useImperativeHandle, useRef } from "react";
+
+	
+ - const Input = React.forwardRef((props, ref) => {
+	const inputRef = useRef();
+
+	const activate = () => {
+		inputRef.current.focus();
+	};
+
+	useImperativeHandle(ref, () => {
+		return { focus: activate };
+	});
+```
 </details>  
-  
 
 
 
