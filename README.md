@@ -86,9 +86,8 @@ useEffect(() => {
 	
 	return (<input type="email" id="email" value={emailState.value} onChange={emailChangeHandler} onBlur={validateEmailHandler}
 		       ``` 
-		       </details>
-
-
+</details>
+	
 - Managing App/Component-wide with Context
 
 
