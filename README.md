@@ -88,10 +88,11 @@ useEffect(() => {
 ```  
 </details>  
   
-<detalils>  
-	<summary>- Managing App/Component-wide with Context </summary>  
-	  
-```js 
+
+	<details>
+	<summary>- Managing App/Component-wide with Context  </summary>  
+  
+```js
 const AuthContext = React.createContext({
 	isLoggedIn: false,
 	onLogout: () => {},
