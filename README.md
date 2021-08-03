@@ -33,7 +33,7 @@
 
 ## 7 - Effects, Reducers & Context
 - Effects & Side Effects  
-Dibounce
+Dibounce  
 	useEffect(() => {  
 		const identifier = setTimeout(() => {  
 			console.log("Checking form validity!");  
@@ -45,9 +45,45 @@ Dibounce
 		};  
 	}, [enteredEmail, enteredPassword]);
 
-
-
 - Managing Complex States with Reducers
+```js
+	const emailReducer = (state, action) => {  
+		if (action.type === "USER_INPUT") {  
+			return { value: action.val, isValid: action.val.includes("@") };  
+		}  
+		if (action.type === "INPUT_BLUR") {  
+			return { value: state.value, isValid: state.value.includes("@") };  
+		}  
+		return { value: "", isValid: false };  
+	};  
+
+	const [emailState, dispatchEmail] = useReducer(emailReducer, { value: "", isValid: undefined });
+
+	const { isValid: emailIsValid } = emailState;
+
+useEffect(() => {
+		const identifier = setTimeout(() => {
+			console.log("running");
+			setFormIsValid(emailIsValid && passwordIsValid);
+		}, 1000);
+		return () => {
+			console.log("ends");
+			clearTimeout(identifier);
+		};
+	}, [emailIsValid, passwordIsValid]);
+
+
+	const emailChangeHandler = (event) => {
+		dispatchEmail({ type: "USER_INPUT", val: event.target.value });
+	
+	};
+
+	const validateEmailHandler = () => {
+		dispatchEmail({ type: "INPUT_BLUR" });
+	};
+```
+
+
 - Managing App/Component-wide with Context
 
 
@@ -77,5 +113,7 @@ setNewTitleFunction('New Title');
 ##### Outputting Dynamic List of Content
 
 ##### Rendering Content Under Certain Conditions
+
+
 
 
