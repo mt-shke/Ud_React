@@ -32,8 +32,11 @@
 	###### useRef -> uncontrolledComponent(using DOM by Ref) | useState -> controlledComponent(use props and callbackFunc like onChange)
 
 ## 7 - Effects, Reducers & Context
-- Effects & Side Effects  
-Dibounce  
+
+<details>
+	<summary>- Effects & Side Effects  </summary>  
+  
+```js
 	useEffect(() => {  
 		const identifier = setTimeout(() => {  
 			console.log("Checking form validity!");  
@@ -43,7 +46,9 @@ Dibounce
 			console.log("Clean up");  
 			clearTimeout(identifier);  
 		};  
-	}, [enteredEmail, enteredPassword]);
+	}, [enteredEmail, enteredPassword]);  
+</details>  
+  
 
 <details>
 	<summary>- Managing Complex States with Reducers </summary>  
