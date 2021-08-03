@@ -84,8 +84,8 @@ useEffect(() => {
 		dispatchEmail({ type: "INPUT_BLUR" });
 	};
 	
-	return (<input type="email" id="email" value={emailState.value} onChange={emailChangeHandler} onBlur={validateEmailHandler}
-		       ``` 
+	return (<input type="email" id="email" value={emailState.value} onChange={emailChangeHandler} onBlur={validateEmailHandler}  
+```  
 </details>  
   
 - Managing App/Component-wide with Context
