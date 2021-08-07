@@ -166,7 +166,7 @@ const Input = React.forwardRef((props, ref) => {
 	};
 
 	useImperativeHandle(ref, () => {
-		return { focus: activate, valRe: returnVal, addOne: addOneMore };
+		return { focus: activate, valReturn: returnVal, addOne: addOneMore };
 	});
 
 	return (
