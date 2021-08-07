@@ -97,7 +97,7 @@ useEffect(() => {
   
 
 <details>
-	<summary>- Managing App/Component-wide with Context, & imperativeHandle with useRef  </summary>  
+	<summary>- Managing App/Component-wide with Context & imperativeHandle with useRef  </summary>  
   
 ```js
 const AuthContext = React.createContext({
@@ -133,20 +133,51 @@ export const AuthContextProvider = (props) => {
 	
 ```js	
 // ImperativeHandle / useRef to call method from parent element via ref
+	// Parent Component
+	const inputDataRef = useRef();
+	const addItem = (e) => {
+		e.preventDefault();
+		inputDataRef.current.addOne();
+	};
 	
-import React, { useEffect, useImperativeHandle, useRef } from "react";
-
+	return (
+		<form className={styles.form}>
+			<Input ref={inputDataRef} />
+			<button onClick={addItem}>+ Add</button>
+		</form>
+	);
 	
- - const Input = React.forwardRef((props, ref) => {
+	// Child Component
+const Input = React.forwardRef((props, ref) => {
 	const inputRef = useRef();
+	const updateValue = (e) => {
+		e.preventDefault();
+		const dish = e.target.closest(".dish").id;
+		console.log(dish, inputRef.current.value);
+	};
 
 	const activate = () => {
+		console.log("focus");
 		inputRef.current.focus();
 	};
 
+	const returnVal = () => {
+		return inputRef.current.value;
+	};
+
+	const addOneMore = () => {
+		inputRef.current.value++;
+		console.log(inputRef.current.value);
+	};
+
 	useImperativeHandle(ref, () => {
-		return { focus: activate };
+		return { focus: activate, valRe: returnVal, addOne: addOneMore };
 	});
+
+	return (
+		<div className={styles.input}>
+			<label>Amount</label>
+			<input  ref={inputRef} type="number"></input>
 ```
 </details>  
 
