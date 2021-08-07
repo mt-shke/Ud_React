@@ -150,12 +150,7 @@ export const AuthContextProvider = (props) => {
 	// Child Component
 const Input = React.forwardRef((props, ref) => {
 	const inputRef = useRef();
-	const updateValue = (e) => {
-		e.preventDefault();
-		const dish = e.target.closest(".dish").id;
-		console.log(dish, inputRef.current.value);
-	};
-
+	
 	const activate = () => {
 		console.log("focus");
 		inputRef.current.focus();
