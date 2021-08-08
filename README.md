@@ -20,9 +20,24 @@
 - Using React DevTools
 
 ## 6 - Fragments, Portals, Refs
-- Jsx Limitations & Fragments  
-	Wrapper React.Fragment
 
+<details>
+	<summary>- Jsx Limitations & Fragments </summary>  
+  
+```js	
+Const Wrapper = (props) => {
+	return <div className='wrapper'>{props.children}<div>
+	
+	//
+	
+	return <React.Fragment>{props.children}<React.Fragment />
+	//
+	return <Fragment>{props.children}<Fragment />
+	//
+	return <>{props.children}</>
+	
+```  
+</details>  
 
 <details>
 	<summary>- Cleaner Dom with Portals </summary>  
@@ -52,10 +67,19 @@ export default Modal;
 </details>  
 
 
-- Refs  
+<details>
+	<summary>-Refs </summary>  
+  
+```js	
+
 	const inputNameRef= useRef(); ref={inputNameRef}  
 	const enteredName = inputNameRef.current.value;  
-	###### useRef -> uncontrolledComponent(using DOM by Ref) | useState -> controlledComponent(use props and callbackFunc like onChange)
+	<input ref={inputNameRef} />
+	
+	// useRef -> uncontrolledComponent(using DOM by Ref) | useState -> controlledComponent(use props and callbackFunc like onChange)
+	
+```  
+</details> 
 
 ## 7 - Effects, Reducers & Context
 
