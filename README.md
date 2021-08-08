@@ -27,8 +27,7 @@
 <details>
 	<summary>- Cleaner Dom with Portals </summary>  
   
-```js
-	
+```js	
 import ReactDOM from "react-dom";
 
 const ModalOverlay = (props) => {
