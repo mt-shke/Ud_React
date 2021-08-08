@@ -23,8 +23,35 @@
 - Jsx Limitations & Fragments  
 	Wrapper React.Fragment
 
-- Cleaner Dom with Portals  
-	backdrop-root
+
+<details>
+	<summary>- Cleaner Dom with Portals </summary>  
+  
+```js
+	
+import ReactDOM from "react-dom";
+
+const ModalOverlay = (props) => {
+	return <div className={styles.backdrop}></div>;
+};
+
+const ModalForm = (props) => {
+	return <div className={styles.modal}>Modal</div>;
+};
+
+const Modal = (props) => {
+	return (
+		<Fragment>
+			{props.form && ReactDOM.createPortal(<ModalOverlay />, document.getElementById("overlay"))}
+			{props.form && ReactDOM.createPortal(<ModalForm />, document.getElementById("modal"))}
+		</Fragment>
+	);
+};
+export default Modal;
+
+```  
+</details>  
+
 
 - Refs  
 	const inputNameRef= useRef(); ref={inputNameRef}  
