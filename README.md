@@ -29,12 +29,13 @@ Const Wrapper = (props) => {
 	return <div className='wrapper'>{props.children}<div>
 	
 	//
-	
 	return <React.Fragment>{props.children}<React.Fragment />
 	//
 	return <Fragment>{props.children}<Fragment />
 	//
 	return <>{props.children}</>
+	
+	// Should always return in one element
 	
 ```  
 </details>  
