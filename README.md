@@ -10,10 +10,64 @@
 - Rendering content under certain conditions
 
 ## 4 - Styling Components
-- Conditional & Dynamic Styles
-- Styled Components
-- CSS Modules
+<details>
+	<summary>Conditional & Dynamic Styles </summary>  
+  
+```js	
+<label style={{ color: !isValid ? 'red' : 'black' }}>Course Goal</label>
+        <input
+          style={{
+            borderColor: !isValid ? 'red' : '#ccc',
+            background: !isValid ? 'salmon' : 'transparent'
+          }}
+          type="text"
+          onChange={goalInputChangeHandler}
+        />
+	
+```  
+</details>  
 
+<details>
+	<summary>Styled Components</summary>  
+  
+```js	
+// npm install --save styled-components
+import styled from 'styled-components';
+
+const Button = styled.button`
+  font: inherit;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #8b005d;
+  color: white;
+  background: #8b005d;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.26);
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+  &:hover,
+  &:active {
+    background: #ac0e77;
+    border-color: #ac0e77;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
+  }
+`;
+	
+```  
+</details>  
+
+<details>
+	<summary>CSS Modules </summary>  
+  
+```js	
+import styles from './CourseInput.module.css';
+	
+  <div className={`${styles['form-control']} ${!isValid && styles.invalid}`}>
+	
+```  
+</details>  
+	
+	
 ## 5 - Debugging 
 - Understanding Error Messages
 - Working with Breakpoints
@@ -22,7 +76,7 @@
 ## 6 - Fragments, Portals, Refs
 
 <details>
-	<summary>- Jsx Limitations & Fragments </summary>  
+	<summary>Jsx Limitations & Fragments </summary>  
   
 ```js	
 Const Wrapper = (props) => {
@@ -41,7 +95,7 @@ Const Wrapper = (props) => {
 </details>  
 
 <details>
-	<summary>- Cleaner Dom with Portals </summary>  
+	<summary>Cleaner Dom with Portals </summary>  
   
 ```js	
 import ReactDOM from "react-dom";
@@ -69,7 +123,7 @@ export default Modal;
 
 
 <details>
-	<summary>-Refs </summary>  
+	<summary>Refs </summary>  
   
 ```js	
 
@@ -85,7 +139,7 @@ export default Modal;
 ## 7 - Effects, Reducers & Context
 
 <details>
-	<summary>- Effects & Side Effects  </summary>  
+	<summary>Effects & Side Effects  </summary>  
   
 ```js
 	useEffect(() => {  
@@ -104,7 +158,7 @@ export default Modal;
   
 
 <details>
-	<summary>- Managing Complex States with Reducers </summary>  
+	<summary>Managing Complex States with Reducers </summary>  
   
 ```js
 	const emailReducer = (state, action) => {  
@@ -148,7 +202,7 @@ useEffect(() => {
   
 
 <details>
-	<summary>- Managing App/Component-wide with Context & imperativeHandle with useRef  </summary>  
+	<summary>Managing App/Component-wide with Context & imperativeHandle with useRef  </summary>  
   
 ```js
 const AuthContext = React.createContext({
