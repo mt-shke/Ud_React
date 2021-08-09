@@ -312,6 +312,68 @@ setNewTitleFunction('New Title');
 
 ##### Rendering Content Under Certain Conditions
 		
+
+```js
+	import CartContext from "./cart-context";
+import { useReducer } from "react";
+
+const defaultCarState = {
+	items: [],
+	totalAmount: 0,
+};
+
+const cartReducer = (state, action) => {
+	if (action.type === "ADD") {
+		const updatedTotalAmount = state.totalAmount + action.item.price * action.item.amount;
+
+		const existingCartItemIndex = state.items.findIndex((item) => item.id === action.item.id);
+		const existingCartItem = state.items[existingCartItemIndex];
+		let updatedItems;
+
+		if (existingCartItem) {
+			const updatedItem = { ...existingCartItem, amount: existingCartItem.amount + action.item.amount };
+			updatedItems = [...state.items];
+			updatedItems[existingCartItemIndex] = updatedItem;
+		} else {
+			const updatedItem = { ...action.item };
+			updatedItems = state.items.concat(action.item);
+		}
+		return {
+			items: updatedItems,
+			totalAmount: updatedTotalAmount,
+		};
+	}
+	if (action.type === "REMOVE") {
+	}
+	return defaultCarState;
+};
+
+const CartProvider = (props) => {
+	const [cartSate, dispatchCartAction] = useReducer(cartReducer, defaultCarState);
+
+	const addItemToCartHandler = (item) => {
+		dispatchCartAction({ type: "ADD", item: item });
+	};
+
+	const removeItemToCartHander = (id) => {
+		dispatchCartAction({ type: "REMOVE", id: id });
+	};
+
+	const cartContext = {
+		items: cartSate.items,
+		totalAmount: 0,
+		addItem: addItemToCartHandler,
+		removeItem: removeItemToCartHander,
+	};
+
+	return <CartContext.Provider value={cartContext}>{props.children}</CartContext.Provider>;
+};
+
+export default CartProvider;
+
+	```js
+	
+	
 	</details>
 
 
