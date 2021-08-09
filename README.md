@@ -312,7 +312,8 @@ setNewTitleFunction('New Title');
 
 ##### Rendering Content Under Certain Conditions
 		
-
+### Complex Reducer & Context Provider	
+	
 ```js
 	import CartContext from "./cart-context";
 import { useReducer } from "react";
