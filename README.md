@@ -10,30 +10,138 @@
 - Rendering content under certain conditions
 
 ## 4 - Styling Components
-- Conditional & Dynamic Styles
-- Styled Components
-- CSS Modules
+<details>
+	<summary>Conditional & Dynamic Styles </summary>  
+  
+```js	
+<label style={{ color: !isValid ? 'red' : 'black' }}>Course Goal</label>
+        <input
+          style={{
+            borderColor: !isValid ? 'red' : '#ccc',
+            background: !isValid ? 'salmon' : 'transparent'
+          }}
+          type="text"
+          onChange={goalInputChangeHandler}
+        />
+	
+```  
+</details>  
 
+<details>
+	<summary>Styled Components</summary>  
+  
+```js	
+// npm install --save styled-components
+import styled from 'styled-components';
+
+const Button = styled.button`
+  font: inherit;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #8b005d;
+  color: white;
+  background: #8b005d;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.26);
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+  &:hover,
+  &:active {
+    background: #ac0e77;
+    border-color: #ac0e77;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
+  }
+`;
+	
+```  
+</details>  
+
+<details>
+	<summary>CSS Modules </summary>  
+  
+```js	
+import styles from './CourseInput.module.css';
+	
+  <div className={`${styles['form-control']} ${!isValid && styles.invalid}`}>
+	
+```  
+</details>  
+	
+	
 ## 5 - Debugging 
 - Understanding Error Messages
 - Working with Breakpoints
 - Using React DevTools
 
 ## 6 - Fragments, Portals, Refs
-- Jsx Limitations & Fragments  
-	Wrapper React.Fragment
 
-- Cleaner Dom with Portals  
-	backdrop-root
+<details>
+	<summary>Jsx Limitations & Fragments </summary>  
+  
+```js	
+Const Wrapper = (props) => {
+	return <div className='wrapper'>{props.children}<div>
+	
+	//
+	return <React.Fragment>{props.children}<React.Fragment />
+	//
+	return <Fragment>{props.children}<Fragment />
+	//
+	return <>{props.children}</>
+	
+	// Should always return in one element
+	
+```  
+</details>  
 
-- Refs  
+<details>
+	<summary>Cleaner Dom with Portals </summary>  
+  
+```js	
+import ReactDOM from "react-dom";
+
+const ModalOverlay = (props) => {
+	return <div className={styles.backdrop}></div>;
+};
+
+const ModalForm = (props) => {
+	return <div className={styles.modal}>Modal</div>;
+};
+
+const Modal = (props) => {
+	return (
+		<Fragment>
+			{props.form && ReactDOM.createPortal(<ModalOverlay />, document.getElementById("overlay"))}
+			{props.form && ReactDOM.createPortal(<ModalForm />, document.getElementById("modal"))}
+		</Fragment>
+	);
+};
+export default Modal;
+
+```  
+</details>  
+
+
+<details>
+	<summary>Refs </summary>  
+  
+```js	
+
 	const inputNameRef= useRef(); ref={inputNameRef}  
 	const enteredName = inputNameRef.current.value;  
-	###### useRef -> uncontrolledComponent(using DOM by Ref) | useState -> controlledComponent(use props and callbackFunc like onChange)
+	<input ref={inputNameRef} />
+	
+	// useRef -> uncontrolledComponent(using DOM by Ref) | useState -> controlledComponent(use props and callbackFunc like onChange)
+	
+```  
+</details> 
 
 ## 7 - Effects, Reducers & Context
-- Effects & Side Effects  
-Dibounce  
+
+<details>
+	<summary>Effects & Side Effects  </summary>  
+  
+```js
 	useEffect(() => {  
 		const identifier = setTimeout(() => {  
 			console.log("Checking form validity!");  
@@ -43,10 +151,14 @@ Dibounce
 			console.log("Clean up");  
 			clearTimeout(identifier);  
 		};  
-	}, [enteredEmail, enteredPassword]);
+	}, [enteredEmail, enteredPassword]);  
+```  
+	
+</details>  
+  
 
 <details>
-	<summary>- Managing Complex States with Reducers </summary>  
+	<summary>Managing Complex States with Reducers </summary>  
   
 ```js
 	const emailReducer = (state, action) => {  
@@ -90,7 +202,7 @@ useEffect(() => {
   
 
 <details>
-	<summary>- Managing App/Component-wide with Context  </summary>  
+	<summary>Managing App/Component-wide with Context & imperativeHandle with useRef  </summary>  
   
 ```js
 const AuthContext = React.createContext({
@@ -123,8 +235,52 @@ export const AuthContextProvider = (props) => {
 	);
 };  
 ```  
+	
+```js	
+// ImperativeHandle / useRef to call method from parent element via ref
+	// Parent Component
+	const inputDataRef = useRef();
+	const addItem = (e) => {
+		e.preventDefault();
+		inputDataRef.current.addOne();
+	};
+	
+	return (
+		<form className={styles.form}>
+			<Input ref={inputDataRef} />
+			<button onClick={addItem}>+ Add</button>
+		</form>
+	);
+	
+	// Child Component
+const Input = React.forwardRef((props, ref) => {
+	const inputRef = useRef();
+	
+	const activate = () => {
+		console.log("focus");
+		inputRef.current.focus();
+	};
+
+	const returnVal = () => {
+		return inputRef.current.value;
+	};
+
+	const addOneMore = () => {
+		inputRef.current.value++;
+		console.log(inputRef.current.value);
+	};
+
+	useImperativeHandle(ref, () => {
+		return { focus: activate, valReturn: returnVal, addOne: addOneMore };
+	});
+
+	return (
+		<div className={styles.input}>
+			<label>Amount</label>
+			<input  ref={inputRef} type="number"></input>
+```
 </details>  
-  
+
 
 ## 8 - useMemo()
 
@@ -173,6 +329,7 @@ class Users extends Component {
     
 </details>  
 
+## Others	
 
 <details>  
 	<summary> Things I've learned </summary>
