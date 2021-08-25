@@ -126,9 +126,9 @@ export const AuthContextProvider = (props) => {
 </details>  
   
 
-## 8 useMemo()
+## 8 - useMemo()
 
-## 9 Class Components
+## 9 - Class Components
 
 <details>
 	<summary> Class Component </summary>  
@@ -174,7 +174,9 @@ class Users extends Component {
 </details>  
 
 
-
+<details>  
+	<summary> Things I've learned </summary>
+	
 
 #### props.items
 
@@ -202,5 +204,5 @@ setNewTitleFunction('New Title');
 ##### Rendering Content Under Certain Conditions
 
 
-
-
+  
+	</details>	
