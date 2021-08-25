@@ -10,138 +10,30 @@
 - Rendering content under certain conditions
 
 ## 4 - Styling Components
-<details>
-	<summary>Conditional & Dynamic Styles </summary>  
-  
-```js	
-<label style={{ color: !isValid ? 'red' : 'black' }}>Course Goal</label>
-        <input
-          style={{
-            borderColor: !isValid ? 'red' : '#ccc',
-            background: !isValid ? 'salmon' : 'transparent'
-          }}
-          type="text"
-          onChange={goalInputChangeHandler}
-        />
-	
-```  
-</details>  
+- Conditional & Dynamic Styles
+- Styled Components
+- CSS Modules
 
-<details>
-	<summary>Styled Components</summary>  
-  
-```js	
-// npm install --save styled-components
-import styled from 'styled-components';
-
-const Button = styled.button`
-  font: inherit;
-  padding: 0.5rem 1.5rem;
-  border: 1px solid #8b005d;
-  color: white;
-  background: #8b005d;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.26);
-  cursor: pointer;
-  &:focus {
-    outline: none;
-  }
-  &:hover,
-  &:active {
-    background: #ac0e77;
-    border-color: #ac0e77;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
-  }
-`;
-	
-```  
-</details>  
-
-<details>
-	<summary>CSS Modules </summary>  
-  
-```js	
-import styles from './CourseInput.module.css';
-	
-  <div className={`${styles['form-control']} ${!isValid && styles.invalid}`}>
-	
-```  
-</details>  
-	
-	
 ## 5 - Debugging 
 - Understanding Error Messages
 - Working with Breakpoints
 - Using React DevTools
 
 ## 6 - Fragments, Portals, Refs
+- Jsx Limitations & Fragments  
+	Wrapper React.Fragment
 
-<details>
-	<summary>Jsx Limitations & Fragments </summary>  
-  
-```js	
-Const Wrapper = (props) => {
-	return <div className='wrapper'>{props.children}<div>
-	
-	//
-	return <React.Fragment>{props.children}<React.Fragment />
-	//
-	return <Fragment>{props.children}<Fragment />
-	//
-	return <>{props.children}</>
-	
-	// Should always return in one element
-	
-```  
-</details>  
+- Cleaner Dom with Portals  
+	backdrop-root
 
-<details>
-	<summary>Cleaner Dom with Portals </summary>  
-  
-```js	
-import ReactDOM from "react-dom";
-
-const ModalOverlay = (props) => {
-	return <div className={styles.backdrop}></div>;
-};
-
-const ModalForm = (props) => {
-	return <div className={styles.modal}>Modal</div>;
-};
-
-const Modal = (props) => {
-	return (
-		<Fragment>
-			{props.form && ReactDOM.createPortal(<ModalOverlay />, document.getElementById("overlay"))}
-			{props.form && ReactDOM.createPortal(<ModalForm />, document.getElementById("modal"))}
-		</Fragment>
-	);
-};
-export default Modal;
-
-```  
-</details>  
-
-
-<details>
-	<summary>Refs </summary>  
-  
-```js	
-
+- Refs  
 	const inputNameRef= useRef(); ref={inputNameRef}  
 	const enteredName = inputNameRef.current.value;  
-	<input ref={inputNameRef} />
-	
-	// useRef -> uncontrolledComponent(using DOM by Ref) | useState -> controlledComponent(use props and callbackFunc like onChange)
-	
-```  
-</details> 
+	###### useRef -> uncontrolledComponent(using DOM by Ref) | useState -> controlledComponent(use props and callbackFunc like onChange)
 
 ## 7 - Effects, Reducers & Context
-
-<details>
-	<summary>Effects & Side Effects  </summary>  
-  
-```js
+- Effects & Side Effects  
+Dibounce  
 	useEffect(() => {  
 		const identifier = setTimeout(() => {  
 			console.log("Checking form validity!");  
@@ -151,14 +43,10 @@ export default Modal;
 			console.log("Clean up");  
 			clearTimeout(identifier);  
 		};  
-	}, [enteredEmail, enteredPassword]);  
-```  
-	
-</details>  
-  
+	}, [enteredEmail, enteredPassword]);
 
 <details>
-	<summary>Managing Complex States with Reducers </summary>  
+	<summary>- Managing Complex States with Reducers </summary>  
   
 ```js
 	const emailReducer = (state, action) => {  
@@ -202,7 +90,7 @@ useEffect(() => {
   
 
 <details>
-	<summary>Managing App/Component-wide with Context & imperativeHandle with useRef  </summary>  
+	<summary>- Managing App/Component-wide with Context  </summary>  
   
 ```js
 const AuthContext = React.createContext({
@@ -235,58 +123,59 @@ export const AuthContextProvider = (props) => {
 	);
 };  
 ```  
-	
-```js	
-// ImperativeHandle / useRef to call method from parent element via ref
-	// Parent Component
-	const inputDataRef = useRef();
-	const addItem = (e) => {
-		e.preventDefault();
-		inputDataRef.current.addOne();
-	};
-	
-	return (
-		<form className={styles.form}>
-			<Input ref={inputDataRef} />
-			<button onClick={addItem}>+ Add</button>
-		</form>
-	);
-	
-	// Child Component
-const Input = React.forwardRef((props, ref) => {
-	const inputRef = useRef();
-	
-	const activate = () => {
-		console.log("focus");
-		inputRef.current.focus();
-	};
+</details>  
+  
 
-	const returnVal = () => {
-		return inputRef.current.value;
-	};
+## 8 useMemo()
 
-	const addOneMore = () => {
-		inputRef.current.value++;
-		console.log(inputRef.current.value);
-	};
+## 9 Class Components
 
-	useImperativeHandle(ref, () => {
-		return { focus: activate, valReturn: returnVal, addOne: addOneMore };
-	});
+<details>
+	<summary>- Managing Complex States with Reducers </summary>  
 
-	return (
-		<div className={styles.input}>
-			<label>Amount</label>
-			<input  ref={inputRef} type="number"></input>
-```
+```js
+class Users extends Component {
+	constructor() {
+		super();
+		this.state = {
+			showUsers: true,
+			moreState: "Test",
+		};
+	}
+
+	toggleUsersHandler() {
+		// this.state.showUsers = false; Not the way
+		this.setState((curState) => {
+			return { showUsers: !curState.showUsers };
+		});
+	}
+
+	render() {
+		const usersList = (
+			<ul>
+				{DUMMY_USERS.map((user) => (
+					<User key={user.id} name={user.name} />
+				))}
+			</ul>
+		);
+
+		return (
+			<div className={classes.users}>
+				<button onClick={this.toggleUsersHandler.bind(this)}>
+					{this.state.showUsers ? "Hide" : "Show"} Users
+				</button>
+				{this.state.showUsers && usersList}
+			</div>
+		);
+	}
+
+```js
+  
 </details>  
 
 
 
-<details>  
 
-<summary> ### Things I've learned </summary>  
-		
 #### props.items
 
     		<Expense items={expenses} />
@@ -311,101 +200,6 @@ setNewTitleFunction('New Title');
 ##### Outputting Dynamic List of Content
 
 ##### Rendering Content Under Certain Conditions
-		
-### Complex Reducer & Context Provider	
-	
-```js
-	import CartContext from "./cart-context";
-import { useReducer } from "react";
-
-const defaultCarState = {
-	items: [],
-	totalAmount: 0,
-};
-
-const cartReducer = (state, action) => {
-	if (action.type === "ADD") {
-		const updatedTotalAmount = state.totalAmount + action.item.price * action.item.amount;
-
-		const existingCartItemIndex = state.items.findIndex((item) => item.id === action.item.id);
-		const existingCartItem = state.items[existingCartItemIndex];
-		let updatedItems;
-
-		if (existingCartItem) {
-			const updatedItem = { ...existingCartItem, amount: existingCartItem.amount + action.item.amount };
-			updatedItems = [...state.items];
-			updatedItems[existingCartItemIndex] = updatedItem;
-		} else {
-			const updatedItem = { ...action.item };
-			updatedItems = state.items.concat(action.item);
-		}
-		return {
-			items: updatedItems,
-			totalAmount: updatedTotalAmount,
-		};
-	}
-	if (action.type === "REMOVE") {
-	}
-	return defaultCarState;
-};
-
-const CartProvider = (props) => {
-	const [cartSate, dispatchCartAction] = useReducer(cartReducer, defaultCarState);
-
-	const addItemToCartHandler = (item) => {
-		dispatchCartAction({ type: "ADD", item: item });
-	};
-
-	const removeItemToCartHander = (id) => {
-		dispatchCartAction({ type: "REMOVE", id: id });
-	};
-
-	const cartContext = {
-		items: cartSate.items,
-		totalAmount: 0,
-		addItem: addItemToCartHandler,
-		removeItem: removeItemToCartHander,
-	};
-
-	return <CartContext.Provider value={cartContext}>{props.children}</CartContext.Provider>;
-};
-
-export default CartProvider;
-
-	```js
-	
-	#### useEffect & timer
-	
-	```js 
-	const HeaderCartButton = (props) => {
-	const [btnIsHighLighted, setBtnIsHighLighted] = useState(false);
-	const cartCtx = useContext(CartContext);
-	const { items } = cartCtx;
-
-	const numberOfCartItems = items.reduce((curNumber, item) => {
-		return curNumber + item.amount;
-	}, 0);
-
-	const btnClasses = `${classes.button} ${btnIsHighLighted ? classes.bump : ""} `;
-
-	useEffect(() => {
-		if (cartCtx.items.length === 0) {
-			return;
-		}
-		setBtnIsHighLighted(true);
-		const timer = setTimeout(() => {
-			setBtnIsHighLighted(false);
-		}, 300);
-
-		return () => {
-			clearTimeout(timer);
-		};
-	}, [items]);
-	
-	```js
-	
-	
-	</details>
 
 
 
