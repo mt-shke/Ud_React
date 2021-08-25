@@ -131,7 +131,7 @@ export const AuthContextProvider = (props) => {
 ## 9 Class Components
 
 <details>
-	<summary>- Managing Complex States with Reducers </summary>  
+	<summary> Class Component </summary>  
 
 ```js
 class Users extends Component {
@@ -168,9 +168,9 @@ class Users extends Component {
 			</div>
 		);
 	}
-
-```js
   
+```js  
+    
 </details>  
 
 
