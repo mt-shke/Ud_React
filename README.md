@@ -360,6 +360,5 @@ setNewTitleFunction('New Title');
 
 ##### Rendering Content Under Certain Conditions
 
-
   
-	</details>	
+</details>	
