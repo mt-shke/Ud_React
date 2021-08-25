@@ -169,7 +169,7 @@ class Users extends Component {
 		);
 	}
   
-```js  
+```
     
 </details>  
 
