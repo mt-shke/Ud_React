@@ -410,12 +410,10 @@ class User extends Component {
 }
   
 ```  
+</details>
 
-
-
-
-
-## Others	
+  
+## Others  	
 
 <details>  
 	<summary> Things I've learned </summary>
