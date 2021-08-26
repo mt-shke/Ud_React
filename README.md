@@ -329,6 +329,92 @@ class Users extends Component {
     
 </details>  
 
+  
+<details>  
+  <summary> componentDidMount(), componentDidUpdate(), componentWillUnmount() </summary>
+
+```js  
+
+class UserFinder extends Component {
+	constructor() {
+		super();
+		this.state = {
+			filteredUser: [],
+			searchTerm: "",
+		};
+	}
+
+	componentDidMount() {
+		// Send http request...
+		this.setState({ filteredUsers: DUMMY_USERS });
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (prevState.searchTerm !== this.state.searchTerm) {
+			this.setState({
+				filteredUsers: DUMMY_USERS.filter((user) => user.name.includes(this.state.searchTerm)),
+			});
+		}
+	}
+
+	searchChangeHandler(event) {
+		this.setState({ searchTerm: event.target.value });
+	}
+
+	render() {
+		return (
+			<Fragment>
+				<div className={styles.finder}>
+					<input type="search" onChange={this.searchChangeHandler.bind(this)} />
+				</div>
+				<Users users={this.state.filteredUsers} />
+			</Fragment>
+		);
+	}
+}
+
+// const UserFinder = () => {
+// 	const [filteredUsers, setFilteredUsers] = useState(DUMMY_USERS);
+// 	const [searchTerm, setSearchTerm] = useState("");
+
+// 	useEffect(() => {
+// 		setFilteredUsers(DUMMY_USERS.filter((user) => user.name.includes(searchTerm)));
+// 	}, [searchTerm]);
+
+// 	const searchChangeHandler = (event) => {
+// 		setSearchTerm(event.target.value);
+// 	};
+
+// 	return (
+// 		<Fragment>
+// 			<div className={styles.finder}>
+// 				<input type="search" onChange={searchChangeHandler} />
+// 			</div>
+// 			<Users users={filteredUsers} />
+// 		</Fragment>
+// 	);
+// };
+  
+```
+
+```js  
+
+class User extends Component {
+	componentWillUnmount() {
+		console.log("user will unmount");
+	}
+
+	render() {
+		return <li className={classes.user}>{this.props.name}</li>;
+	}
+}
+  
+```  
+
+
+
+
+
 ## Others	
 
 <details>  
