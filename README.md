@@ -335,6 +335,7 @@ class Users extends Component {
 
 ```js  
 
+// Using Class based component methods
 class UserFinder extends Component {
 	constructor() {
 		super();
@@ -373,6 +374,7 @@ class UserFinder extends Component {
 	}
 }
 
+// Using Hooks
 // const UserFinder = () => {
 // 	const [filteredUsers, setFilteredUsers] = useState(DUMMY_USERS);
 // 	const [searchTerm, setSearchTerm] = useState("");
