@@ -413,7 +413,104 @@ class User extends Component {
   
 ```  
 </details>
+  
+static contextType = UsersContext;
 
+error boundaries
+
+<details>
+
+<summary> static contextType </summary>
+
+```js
+// In app.js
+const DUMMY_USERS = [
+	{ id: "u1", name: "Max" },
+	{ id: "u2", name: "Manuel" },
+	{ id: "u3", name: "Julie" },
+];
+
+function App() {
+	const usersContext = {
+		users: DUMMY_USERS,
+	};
+
+	return (
+		<UsersContext.Provider value={usersContext}>
+			<UserFinder />
+		</UsersContext.Provider>
+	);
+}
+```
+
+```js
+// In UserFinder.js
+class UserFinder extends Component {
+	static contextType = UsersContext;
+
+	constructor() {
+		super();
+		this.state = {
+			filteredUsers: [],
+			searchTerm: "",
+		};
+	}
+
+	componentDidMount() {
+		// Send http request...
+		this.setState({ filteredUsers: this.context.users });
+	}
+
+```
+
+</details>
+
+</details>
+
+<details>  
+<summary> Error Boundaries </summary>
+
+```js
+class ErrorBoundary extends Component {
+	constructor() {
+		super();
+		this.state = {
+			hasError: false,
+		};
+	}
+
+	componentDidCatch() {
+		this.setState({ hasError: true });
+	}
+
+	render() {
+		if (this.state.hasError) {
+			return <p>Something went wrong!</p>;
+		}
+		return this.props.children;
+	}
+}
+```
+
+```js
+// In child component
+
+	componentDidUpdate() {
+		// try {
+		// 	failCode()
+		// } catch (err) {
+		// 	console.log(err.message);
+		// }
+		if (this.props.users.length === 0) {
+			throw new Error("Custom Error! No users provided!");
+		}
+	}
+```
+
+</details>
+
+
+	
   
 ## Others  	
 
