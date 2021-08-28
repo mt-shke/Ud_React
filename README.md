@@ -414,13 +414,10 @@ class User extends Component {
 ```  
 </details>
   
-static contextType = UsersContext;
-
-error boundaries
 
 <details>
 
-<summary> static contextType </summary>
+<summary>Static ContextType </summary>
 
 ```js
 // In app.js
@@ -468,7 +465,7 @@ class UserFinder extends Component {
 </details>
 
 <details>  
-<summary> Error Boundaries </summary>
+<summary>Error Boundaries </summary>
 
 ```js
 class ErrorBoundary extends Component {
