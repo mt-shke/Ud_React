@@ -509,15 +509,10 @@ class ErrorBoundary extends Component {
 ## 10 - Backend & Database
 
 <details>  
-<summary>Backend and Database</summary>  
+<summary>Working with backend and database</summary>  
 
 ```js
 
-import React, { useState, useEffect, useCallback } from "react";
-
-import MoviesList from "./components/MoviesList";
-import AddMovie from "./components/AddMovie";
-import "./App.css";
 
 function App() {
 	const [movies, setMovies] = useState([]);
@@ -608,8 +603,6 @@ function App() {
 		</React.Fragment>
 	);
 }
-
-export default App;
 
 
 ```
