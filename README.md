@@ -610,6 +610,130 @@ function App() {
 </details>  
 	
   
+
+
+
+## 11 - Custom Hooks
+<details>
+<summary>useSynthax</summary>
+
+```js  
+const useCounter = (forwards = true) => {
+	const [counter, setCounter] = useState(0);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (forwards) {
+				setCounter((prevCounter) => prevCounter + 1);
+			} else {
+				setCounter((prevCounter) => prevCounter - 1);
+			}
+		}, 1000);
+		return () => clearInterval(interval);
+	}, [forwards]);
+	return counter;
+};
+export default useCounter;  
+```  
+
+```js  
+import useCounter from "./hooks/use-counter";
+const BackwardCounter = () => {
+	const counter = useCounter(false);
+
+	return <Card>{counter}</Card>;
+};
+``` 
+
+</details>
+
+
+
+<details>
+<summary>customHooks</summary>
+
+```js
+
+const useHttp = (requestConfig, applyData) => {
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState(null);
+
+	const sendRequest = async (taskText) => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			const response = await fetch(requestConfig.url, {
+				method: requestConfig.method ? requestConfig.method : "GET",
+				headers: requestConfig.headers ? requestConfig.headers : {},
+				body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
+			});
+
+			if (!response.ok) {
+				throw new Error("Request failed!");
+			}
+
+			const data = await response.json();
+			applyData(data);
+		} catch (err) {
+			setError(err.message || "Something went wrong!");
+		}
+		setIsLoading(false);
+	};
+
+	return {
+		isLoading,
+		error,
+		sendRequest,
+	};
+
+
+```
+
+```js
+
+const [tasks, setTasks] = useState([]);
+	const transformTasks = (taskObj) => {
+		const loadedTasks = [];
+		for (const taskKey in taskObj) {
+			loadedTasks.push({ id: taskKey, text: taskObj[taskKey].text });
+		}
+
+		setTasks(loadedTasks);
+	};
+
+	const {
+		isLoading,
+		error,
+		sendRequest: fetchTasks,
+	} = useHttp(
+		{ url: "https://react-app-29bac-default-rtdb.europe-west1.firebasedatabase.app/tasks.json" },
+		transformTasks
+	);
+
+	useEffect(() => {
+		fetchTasks();
+	}, []);
+
+	const taskAddHandler = (task) => {
+		setTasks((prevTasks) => prevTasks.concat(task));
+	};
+
+```
+
+
+</details>
+
+<details>
+
+<summary>customHooks</summary>
+</details>
+
+
+
+
+
+
+
 ## Others  	
 
 <details>  
