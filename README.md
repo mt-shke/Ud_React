@@ -1,15 +1,19 @@
 ## 1- Component-Driven User Interfaces
+
 - React Core Syntax & JSX
 
 ## 2 - User Interaction & State
+
 - Re-usable and reactive components
 - Handling Events -> update UI & working with "State"
 
 ## 3 - Rendering Lists & Conditionnal Content
+
 - Outputting Dynamic lists of content
 - Rendering content under certain conditions
 
 ## 4 - Styling Components
+
 <details>
 	<summary>Conditional & Dynamic Styles </summary>  
   
@@ -25,7 +29,7 @@
         />
 	
 ```  
-</details>  
+</details>
 
 <details>
 	<summary>Styled Components</summary>  
@@ -34,37 +38,21 @@
 // npm install --save styled-components
 import styled from 'styled-components';
 
-const Button = styled.button`
-  font: inherit;
-  padding: 0.5rem 1.5rem;
-  border: 1px solid #8b005d;
-  color: white;
-  background: #8b005d;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.26);
-  cursor: pointer;
-  &:focus {
-    outline: none;
-  }
-  &:hover,
-  &:active {
-    background: #ac0e77;
-    border-color: #ac0e77;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.26);
-  }
-`;
-	
-```  
-</details>  
+const Button = styled.button` font: inherit; padding: 0.5rem 1.5rem; border: 1px solid #8b005d; color: white; background: #8b005d; box-shadow: 0 0 4px rgba(0, 0, 0, 0.26); cursor: pointer; &:focus { outline: none; } &:hover, &:active { background: #ac0e77; border-color: #ac0e77; box-shadow: 0 0 8px rgba(0, 0, 0, 0.26); }`;
+
+````
+</details>
 
 <details>
-	<summary>CSS Modules </summary>  
-  
-```js	
+	<summary>CSS Modules </summary>
+
+```js
 import styles from './CourseInput.module.css';
-	
+
   <div className={`${styles['form-control']} ${!isValid && styles.invalid}`}>
-	
-```  
+
+````
+
 </details>  
 	
 	
@@ -92,7 +80,7 @@ Const Wrapper = (props) => {
 	// Should always return in one element
 	
 ```  
-</details>  
+</details>
 
 <details>
 	<summary>Cleaner Dom with Portals </summary>  
@@ -101,40 +89,41 @@ Const Wrapper = (props) => {
 import ReactDOM from "react-dom";
 
 const ModalOverlay = (props) => {
-	return <div className={styles.backdrop}></div>;
+return <div className={styles.backdrop}></div>;
 };
 
 const ModalForm = (props) => {
-	return <div className={styles.modal}>Modal</div>;
+return <div className={styles.modal}>Modal</div>;
 };
 
 const Modal = (props) => {
-	return (
-		<Fragment>
-			{props.form && ReactDOM.createPortal(<ModalOverlay />, document.getElementById("overlay"))}
-			{props.form && ReactDOM.createPortal(<ModalForm />, document.getElementById("modal"))}
-		</Fragment>
-	);
+return (
+<Fragment>
+{props.form && ReactDOM.createPortal(<ModalOverlay />, document.getElementById("overlay"))}
+{props.form && ReactDOM.createPortal(<ModalForm />, document.getElementById("modal"))}
+</Fragment>
+);
 };
 export default Modal;
 
-```  
-</details>  
+````
+</details>
 
 
 <details>
-	<summary>Refs </summary>  
-  
-```js	
+	<summary>Refs </summary>
 
-	const inputNameRef= useRef(); ref={inputNameRef}  
-	const enteredName = inputNameRef.current.value;  
+```js
+
+	const inputNameRef= useRef(); ref={inputNameRef}
+	const enteredName = inputNameRef.current.value;
 	<input ref={inputNameRef} />
-	
+
 	// useRef -> uncontrolledComponent(using DOM by Ref) | useState -> controlledComponent(use props and callbackFunc like onChange)
-	
-```  
-</details> 
+
+````
+
+</details>
 
 ## 7 - Effects, Reducers & Context
 
@@ -155,7 +144,7 @@ export default Modal;
 ```  
 	
 </details>  
-  
+
 
 <details>
 	<summary>Managing Complex States with Reducers </summary>  
@@ -169,41 +158,41 @@ export default Modal;
 			return { value: state.value, isValid: state.value.includes("@") };  
 		}  
 		return { value: "", isValid: false };  
-	};  
+	};
 
-	const [emailState, dispatchEmail] = useReducer(emailReducer, { value: "", isValid: undefined });
+    const [emailState, dispatchEmail] = useReducer(emailReducer, { value: "", isValid: undefined });
 
-	const { isValid: emailIsValid } = emailState;
+    const { isValid: emailIsValid } = emailState;
 
 useEffect(() => {
-		const identifier = setTimeout(() => {
-			console.log("running");
-			setFormIsValid(emailIsValid && passwordIsValid);
-		}, 1000);
-		return () => {
-			console.log("ends");
-			clearTimeout(identifier);
-		};
-	}, [emailIsValid, passwordIsValid]);
+const identifier = setTimeout(() => {
+console.log("running");
+setFormIsValid(emailIsValid && passwordIsValid);
+}, 1000);
+return () => {
+console.log("ends");
+clearTimeout(identifier);
+};
+}, [emailIsValid, passwordIsValid]);
 
+    const emailChangeHandler = (event) => {
+    	dispatchEmail({ type: "USER_INPUT", val: event.target.value });
 
-	const emailChangeHandler = (event) => {
-		dispatchEmail({ type: "USER_INPUT", val: event.target.value });
-	
-	};
+    };
 
-	const validateEmailHandler = () => {
-		dispatchEmail({ type: "INPUT_BLUR" });
-	};
-	
-	return (<input type="email" id="email"  value={emailState.value} onChange={emailChangeHandler} onBlur={validateEmailHandler}  
-```  
-</details>  
-  
+    const validateEmailHandler = () => {
+    	dispatchEmail({ type: "INPUT_BLUR" });
+    };
+
+    return (<input type="email" id="email"  value={emailState.value} onChange={emailChangeHandler} onBlur={validateEmailHandler}
+
+````
+</details>
+
 
 <details>
-	<summary>Managing App/Component-wide with Context & imperativeHandle with useRef  </summary>  
-  
+	<summary>Managing App/Component-wide with Context & imperativeHandle with useRef  </summary>
+
 ```js
 const AuthContext = React.createContext({
 	isLoggedIn: false,
@@ -233,10 +222,10 @@ export const AuthContextProvider = (props) => {
 			{props.children}
 		</AuthContext.Provider>
 	);
-};  
-```  
-	
-```js	
+};
+````
+
+```js
 // ImperativeHandle / useRef to call method from parent element via ref
 	// Parent Component
 	const inputDataRef = useRef();
@@ -244,18 +233,18 @@ export const AuthContextProvider = (props) => {
 		e.preventDefault();
 		inputDataRef.current.addOne();
 	};
-	
+
 	return (
 		<form className={styles.form}>
 			<Input ref={inputDataRef} />
 			<button onClick={addItem}>+ Add</button>
 		</form>
 	);
-	
+
 	// Child Component
 const Input = React.forwardRef((props, ref) => {
 	const inputRef = useRef();
-	
+
 	const activate = () => {
 		console.log("focus");
 		inputRef.current.focus();
@@ -279,15 +268,15 @@ const Input = React.forwardRef((props, ref) => {
 			<label>Amount</label>
 			<input  ref={inputRef} type="number"></input>
 ```
-</details>  
 
+</details>
 
 ## 8 - useMemo()
 
 ## 9 - Class Components
 
 <details>
-	<summary> Class Component </summary>  
+	<summary> Class Component </summary>
 
 ```js
 class Users extends Component {
@@ -324,16 +313,15 @@ class Users extends Component {
 			</div>
 		);
 	}
-  
+
 ```
-    
+
 </details>  
   
 <details>  
   <summary> componentDidMount(), componentDidUpdate(), componentWillUnmount() </summary>
 
-```js  
-
+```js
 // Using Class based component methods
 class UserFinder extends Component {
 	constructor() {
@@ -395,11 +383,9 @@ class UserFinder extends Component {
 // 		</Fragment>
 // 	);
 // };
-  
 ```
 
-```js  
-
+```js
 class User extends Component {
 	componentWillUnmount() {
 		console.log("user will unmount");
@@ -409,10 +395,10 @@ class User extends Component {
 		return <li className={classes.user}>{this.props.name}</li>;
 	}
 }
-  
-```  
+```
+
 </details>
-  
+
 
 <details>
 
@@ -505,15 +491,12 @@ class ErrorBoundary extends Component {
 
 </details>
 
-
 ## 10 - Backend & Database
 
 <details>  
-<summary>Working with backend and database</summary>  
+<summary>Working with backend and database</summary>
 
 ```js
-
-
 function App() {
 	const [movies, setMovies] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -603,21 +586,18 @@ function App() {
 		</React.Fragment>
 	);
 }
-
-
 ```
 
 </details>  
 	
-  
-
 
 
 ## 11 - Custom Hooks
+
 <details>
 <summary>useSynthax</summary>
 
-```js  
+```js
 const useCounter = (forwards = true) => {
 	const [counter, setCounter] = useState(0);
 
@@ -633,32 +613,30 @@ const useCounter = (forwards = true) => {
 	}, [forwards]);
 	return counter;
 };
-export default useCounter;  
-```  
+export default useCounter;
+```
 
-```js  
+```js
 import useCounter from "./hooks/use-counter";
 const BackwardCounter = () => {
 	const counter = useCounter(false);
 
 	return <Card>{counter}</Card>;
 };
-``` 
+```
 
 </details>
-
-
 
 <details>
 <summary>customHooks</summary>
 
 ```js
 
-const useHttp = (requestConfig, applyData) => {
+const useHttp = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
 
-	const sendRequest = async (taskText) => {
+	const sendRequest = useCallback(async (requestConfig, applyData) => {
 		setIsLoading(true);
 		setError(null);
 		try {
@@ -678,48 +656,50 @@ const useHttp = (requestConfig, applyData) => {
 			setError(err.message || "Something went wrong!");
 		}
 		setIsLoading(false);
-	};
+	}, []);
 
 	return {
 		isLoading,
 		error,
 		sendRequest,
 	};
-
+};
 
 ```
 
 ```js
 
-const [tasks, setTasks] = useState([]);
-	const transformTasks = (taskObj) => {
-		const loadedTasks = [];
-		for (const taskKey in taskObj) {
-			loadedTasks.push({ id: taskKey, text: taskObj[taskKey].text });
-		}
+function App() {
+	const [tasks, setTasks] = useState([]);
 
-		setTasks(loadedTasks);
-	};
-
-	const {
-		isLoading,
-		error,
-		sendRequest: fetchTasks,
-	} = useHttp(
-		{ url: "https://react-app-29bac-default-rtdb.europe-west1.firebasedatabase.app/tasks.json" },
-		transformTasks
-	);
-
+	const { isLoading, error, sendRequest: fetchTasks } = useHttp();
 	useEffect(() => {
-		fetchTasks();
-	}, []);
+		const transformTasks = (taskObj) => {
+			const loadedTasks = [];
+			for (const taskKey in taskObj) {
+				loadedTasks.push({ id: taskKey, text: taskObj[taskKey].text });
+			}
+			setTasks(loadedTasks);
+		};
+
+		fetchTasks(
+			{ url: "https://react-app-29bac-default-rtdb.europe-west1.firebasedatabase.app/tasks.json" },
+			transformTasks
+		);
+	}, [fetchTasks]);
 
 	const taskAddHandler = (task) => {
 		setTasks((prevTasks) => prevTasks.concat(task));
 	};
 
+	return (
+		<React.Fragment>
+			<NewTask onAddTask={taskAddHandler} />
+			<Tasks items={tasks} loading={isLoading} error={error} onFetch={fetchTasks} />
+		</React.Fragment>
+	);
+}
 ```
-
 
 </details>
 
@@ -728,28 +708,18 @@ const [tasks, setTasks] = useState([]);
 <summary>customHooks</summary>
 </details>
 
-
-
-
-
-
-
-## Others  	
+## Others
 
 <details>  
 	<summary> Things I've learned </summary>
-	
 
-#### props.items
-
-    		<Expense items={expenses} />
 
 #### Component function Card() {
 
 - const classes = "card " + props.className;
 - return <div className={classes}>{props.children}</div>;
   }
-  }
+
 
 ##### DOM Element onClick
 
@@ -765,5 +735,4 @@ setNewTitleFunction('New Title');
 
 ##### Rendering Content Under Certain Conditions
 
-  
-</details>	
+</details>
