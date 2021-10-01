@@ -143,8 +143,7 @@ export default Modal;
 	}, [enteredEmail, enteredPassword]);  
 ```  
 	
-</details>  
-
+</details>
 
 <details>
 	<summary>Managing Complex States with Reducers </summary>  
@@ -399,7 +398,6 @@ class User extends Component {
 
 </details>
 
-
 <details>
 
 <summary>Static ContextType </summary>
@@ -588,9 +586,7 @@ function App() {
 }
 ```
 
-</details>  
-	
-
+</details>
 
 ## 11 - Custom Hooks
 
@@ -631,7 +627,6 @@ const BackwardCounter = () => {
 <summary>customHooks</summary>
 
 ```js
-
 const useHttp = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
@@ -664,11 +659,9 @@ const useHttp = () => {
 		sendRequest,
 	};
 };
-
 ```
 
 ```js
-
 function App() {
 	const [tasks, setTasks] = useState([]);
 
@@ -708,18 +701,101 @@ function App() {
 <summary>customHooks</summary>
 </details>
 
+## 12 - Form & Input
+
+<details>
+<summary>With custom input hook</summary>
+
+useInput hook
+
+```js
+const useInput = (validateValue) => {
+	const [enteredValue, setEnteredValue] = useState("");
+	const [isTouched, setIsTouched] = useState(false);
+
+	const valueIsValid = validateValue(enteredValue);
+	const hasError = !valueIsValid && isTouched;
+
+	const valueChangeHandler = (event) => {
+		setEnteredValue(event.target.value);
+	};
+
+	const inputBlurHandler = (event) => {
+		setIsTouched(true);
+	};
+
+	const reset = () => {
+		setEnteredValue("");
+		setIsTouched(false);
+	};
+
+	return {
+		value: enteredValue,
+		isValid: valueIsValid,
+		hasError,
+		valueChangeHandler,
+		inputBlurHandler,
+		reset,
+	};
+};
+export default useInput;
+```
+
+Form component
+
+```js
+import useInput from "../hooks/use-input";
+
+const SimpleInput = (props) => {
+const {
+		value: enteredName,
+		isValid: enteredNameIsValid,
+		hasError: nameInputHasError,
+		valueChangeHandler: nameInputChangeHandler,
+		inputBlurHandler: nameBlurHandler,
+		reset: resetNameInput,
+	} = useInput((value) => value.trim() !== "");
+
+	let formIsValid = false;
+	if (enteredNameIsValid) {
+		formIsValid = true;
+	}
+	const formSubmissionHandler = (event) => {
+		event.preventDefault();
+		resetNameInput();
+	};
+
+	const nameInputClasses = nameInputHasError ? "form-control invalid" : "form-control";
+
+	return (
+		<form onSubmit={formSubmissionHandler}>
+			<div className={nameInputClasses}>
+				<label htmlFor="name">Your Name</label>
+				<input
+					type="text"
+					id="name"
+					onBlur={nameBlurHandler}
+					onChange={nameInputChangeHandler}
+					value={enteredName}
+				/>
+				{nameInputHasError && <p className="error-text">Name must not be empty.</p>}
+			</div>
+            ...
+
+```
+
+</details>
+
 ## Others
 
 <details>  
 	<summary> Things I've learned </summary>
-
 
 #### Component function Card() {
 
 - const classes = "card " + props.className;
 - return <div className={classes}>{props.children}</div>;
   }
-
 
 ##### DOM Element onClick
 
