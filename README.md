@@ -786,6 +786,210 @@ const {
 
 </details>
 
+## 13 - Redux
+
+<details>
+<summary>Redux - createStore | useDispatch, useSelector</summary>
+
+```js
+import { createStore } from "redux";
+
+const initialCounterState = { value: 0, showCounter: true };
+const counterReducer = (state = initialState, action) => {
+	if (action.type === "increment")
+		return {
+			counter: state.counter + 1,
+			showCounter: state.showCounter,
+		};
+	if (action.type === "increase")
+		return {
+			counter: state.counter + action.amount,
+			showCounter: state.showCounter,
+		};
+
+	if (action.type === "decrement")
+		return {
+			counter: state.counter - 1,
+			showCounter: state.showCounter,
+		};
+
+	if (action.type === "toggle")
+		return {
+			showCounter: !state.showCounter,
+			counter: state.counter,
+		};
+
+	return state;
+};
+
+const store = createStore(counterReducer);
+
+export default store;
+```
+
+index.js
+
+```js
+import { Provider } from "react-redux";
+import store from "./store/redux-store";
+
+ReactDOM.render(
+	<Provider store={store}>
+		<App />
+	</Provider>,
+	document.getElementById("root")
+);
+```
+
+</details>
+
+<details>
+<summary>Redux toolKit : createSlice, configureStore</summary>
+
+Store
+
+```js
+import { createSlice, configureStore } from "@reduxjs/toolkit";
+import counterReducer from "./counterReducer";
+
+const store = configureStore({
+	reducer: { counter: counterReducer, authentification: authReducer },
+});
+
+export default store;
+```
+
+Counter reducer
+
+```js
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialCounterState = { value: 0, showCounter: true };
+
+const counterSlice = createSlice({
+	name: "counter",
+	initialState: initialCounterState,
+	reducers: {
+		increment(state) {
+			state.value++;
+		},
+		decrement(state) {
+			state.value--;
+		},
+		increase(state, action) {
+			console.log(action);
+			state.value = state.value + action.payload;
+		},
+		toggleCounter(state) {
+			state.value = state.value;
+			state.showCounter = !state.showCounter;
+		},
+	},
+});
+
+export default counterSlice.reducer;
+export const counterActions = counterSlice.actions;
+```
+
+Counter component
+
+```js
+import { useDispatch, useSelector } from "react-redux";
+import { counterActions } from "../store/redux-store";
+import classes from "./Counter.module.css";
+
+const Counter = () => {
+	const dispatch = useDispatch();
+	const counter = useSelector((state) => state.counter.value);
+	const show = useSelector((state) => state.counter.showCounter);
+
+	const incrementHandler = () => {
+		dispatch(counterActions.increment());
+	};
+	const incrementBy5Handler = () => {
+		dispatch(counterActions.increase(5));
+	};
+
+	const decrementHandler = () => {
+		dispatch(counterActions.decrement());
+	};
+
+	const toggleCounterHandler = () => {
+		dispatch(counterActions.toggleCounter());
+	};
+
+	return (
+		<main className={classes.counter}>
+			<h1>Redux Counter</h1>
+			{show && <div className={classes.value}>{counter}</div>}
+			<button onClick={incrementHandler}>Increment</button>
+			<button onClick={incrementBy5Handler}>Increase by 5</button>
+			<button onClick={decrementHandler}>Decrement</button>
+			<button onClick={toggleCounterHandler}>Toggle Counter</button>
+		</main>
+	);
+};
+
+export default Counter;
+```
+
+</details>
+
+<details>
+<summary>Redux Class Component</summary>
+
+```js
+
+import { connect } from "react-redux";
+import { Component } from "react;";
+
+import classes from "./Counter.module.css";
+
+class CounterClass extends Component {
+    incrementHandler() {
+        this.props.increment();
+    }
+
+    decrementHandler() {
+        this.props.decrement();
+    }
+
+    toggleCounterHandler() {
+
+        render() {
+            return (
+                <main className={classes.counter}>
+                    <h1>Redux Counter</h1>
+                    <div className={classes.value}>{this.props.counter}</div>
+                    <button onClick={this.incrementHandler.bind(this)}>Increment</button>
+                    <button onClick={this.decrementHandler.bind(this)}>Decrement</button>
+                    <button onClick={this.toggleCounterHandler}>Toggle Counter</button>
+                </main>
+            );
+        }
+    }
+}
+
+const mapStateToProps = state => {
+  return {
+    counter:state.counter
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+      increment: () => dispatch({ type: 'increment' }),
+    decrement: () => dispatch ({type: 'decrement'})
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CounterClass);
+
+
+```
+
+</details>
+
 ## Others
 
 <details>  
