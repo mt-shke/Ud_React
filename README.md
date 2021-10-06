@@ -990,6 +990,317 @@ export default connect(mapStateToProps, mapDispatchToProps)(CounterClass);
 
 </details>
 
+## 14 - Redux Advanced - Async code
+
+<details>
+	<summary>Prefering Reducer</summary>
+
+Component
+
+```js
+const addToCartHandler = () => {
+	dispatch(
+		cartActions.addItemToCart({
+			id,
+			title,
+			price,
+		})
+	);
+};
+```
+
+Reducer slice
+
+```js
+
+const cartSlice = createSlice({
+	name: "cart",
+	initialState: {
+		items: [],
+		totalQuantity: 0,
+		totalAmount: 0,
+	},
+	reducers: {
+		replaceCart(state, action) {
+			state.totalQuantity = action.payload.totalQuantity;
+			state.items = action.payload.items;
+		},
+
+		addItemToCart(state, action) {
+			const newItem = action.payload;
+
+			const existingItem = state.items.find((item) => item.id === newItem.id);
+			state.totalQuantity++;
+			console.log(newItem);
+
+			if (!existingItem) {
+				state.items.push({
+					id: newItem.id,
+					price: newItem.price,
+					quantity: 1,
+					totalPrice: newItem.price,
+					name: newItem.title,
+				});
+			} else {
+				existingItem.quantity++;
+				existingItem.totalPrice = existingItem.totalPrice + newItem.price;
+			}
+		},
+
+```
+
+App / Async Component
+
+```js
+
+let isInitial = true;
+
+function App() {
+	const dispatch = useDispatch();
+	const showCart = useSelector((state) => state.ui.cartIsVisible);
+	const cart = useSelector((state) => state.cart);
+	const notification = useSelector((state) => state.ui.notification);
+
+	useEffect(() => {
+		const sendCardData = async () => {
+			dispatch(
+				uiActions.showNotification({
+					status: "pending",
+					title: "Sending...",
+					message: "Sending cart data!",
+				})
+			);
+
+			const response = await fetch(
+				"https://react-app-29bac-default-rtdb.europe-west1.firebasedatabase.app/cart.json",
+				{
+					method: "PUT",
+					body: JSON.stringify(cart),
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("Sending cart data failed");
+			}
+
+			dispatch(
+				uiActions.showNotification({
+					status: "success",
+					title: "Success!",
+					message: "Sent cart data successfully!",
+				})
+			);
+		};
+
+		if (isInitial) {
+			isInitial = false;
+			return;
+		}
+
+		sendCardData().catch((error) =>
+			dispatch(
+				uiActions.showNotification({
+					status: "error",
+					title: "Error!",
+					message: "Sending cart data failed!",
+				})
+			)
+		);
+	}, [cart, dispatch]);
+
+```
+
+</details>
+
+<details>
+	<summary>Prefering Action & Components</summary>
+
+Component
+
+```js
+const ProductItem = (props) => {
+	const cart = useSelector((state) => state.cart);
+	const dispatch = useDispatch();
+	const { title, price, description, id } = props;
+
+	const addToCartHandler = () => {
+
+const newTotalQuantity = cart.totalQuantity + 1;
+
+	const updatedItems = cart.items.slice(); // create copy via slice to avoid mutating original state
+	const existingItem = updatedItems.find((item) => item.id === id);
+	if (existingItem) {
+		const updatedItem = { ...existingItem }; // new object + copy existing properties to avoid state mutation
+		updatedItem.quantity++;
+		updatedItem.totalPrice = updatedItem.totalPrice + price;
+		const existingItemIndex = updatedItems.findIndex((item) => item.id === id);
+		updatedItems[existingItemIndex] = updatedItem;
+	} else {
+		updatedItems.push({
+			id: id,
+			price: price,
+			quantity: 1,
+			totalPrice: price,
+			name: title,
+		});
+	}
+
+	const newCart = {
+		totalQuantity: newTotalQuantity,
+		items: updatedItems,
+	};
+	dispatch(cartActions.replaceCart(newCart));
+	};
+
+```
+
+Reducer
+
+```js
+const cartSlice = createSlice({
+	name: "cart",
+	initialState: {
+		items: [],
+		totalQuantity: 0,
+		totalAmount: 0,
+	},
+	reducers: {
+		replaceCart(state, action) {
+			state.totalQuantity = action.payload.totalQuantity;
+			state.items = action.payload.items;
+		},
+
+```
+
+Calling Component
+
+```js
+useEffect(() => {
+	if (isInitial) {
+		isInitial = false;
+		return;
+	}
+	dispatch(sendCardData(cart));
+}, [cart, dispatch]);
+```
+
+Action Slice Component
+
+```js
+export const sendCartData = (cart) => {
+	return async (dispatch) => {
+		dispatch(
+			uiActions.showNotification({
+				status: "pending",
+				title: "Sending...",
+				message: "Sending cart data!",
+			})
+		);
+
+		const sendRequest = async () => {
+			const response = await fetch(
+				"https://react-app-29bac-default-rtdb.europe-west1.firebasedatabase.app/cart.json",
+				{
+					method: "PUT",
+					body: JSON.stringify(cart),
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("Sending cart data failed");
+			}
+		};
+
+		try {
+			await sendRequest();
+			dispatch(
+				uiActions.showNotification({
+					status: "success",
+					title: "Success!",
+					message: "Sent cart data successfully!",
+				})
+			);
+		} catch (error) {
+			dispatch(
+				uiActions.showNotification({
+					status: "error",
+					title: "Error!",
+					message: "Sending cart data failed!",
+				})
+			);
+		}
+	};
+};
+```
+
+</details>
+
+<details>
+	<summary>Fetching data logic</summary>
+
+Calling Component
+
+```js
+useEffect(() => {
+	dispatch(fetchCartData());
+}, [dispatch]);
+
+useEffect(() => {
+	if (isInitial) {
+		isInitial = false;
+		return;
+	}
+	if (cart.changed) {
+		dispatch(sendCartData(cart));
+	}
+}, [cart, dispatch]);
+```
+
+Action Component / Action Creator
+
+```js
+export const fetchCartData = () => {
+	return async (dispatch) => {
+		const fetchData = async () => {
+			const response = await fetch(
+				"https://react-app-29bac-default-rtdb.europe-west1.firebasedatabase.app/cart.json"
+			);
+
+			if (!response.ok) {
+				throw new Error("Could not fetch data!");
+			}
+
+			const data = await response.json();
+			return data;
+		};
+
+		try {
+			const cartData = await fetchData();
+			dispatch(
+				cartActions.replaceCart({
+					items: cartData.items || [],
+					totalQuantity: cartData.totalQuantity,
+				})
+			);
+		} catch (error) {
+			dispatch(
+				uiActions.showNotification({
+					status: "error",
+					title: "Error!",
+					message: "Fetching  data failed!",
+				})
+			);
+		}
+	};
+};
+```
+
+</details>
+Redux DevTools
+
+
+
+
 ## 16 - Deploy React App
 
 <details>  
