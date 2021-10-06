@@ -990,6 +990,35 @@ export default connect(mapStateToProps, mapDispatchToProps)(CounterClass);
 
 </details>
 
+## 16 - Deploy React App
+
+<details>  
+<summary>Deployment steps</summary>
+
+```
+-Test code
+
+-Optimize
+>( react.memo)
+
+>Lazy loading
+React.lazy(() => import('./path/'));
+<Suspense fallback={<div><LoadingSpinnger /></div>}>
+<Route...
+</Suspense>
+
+-Build app
+package.json
+npm run build
+
+-Upload
+
+-Configure server
+
+```
+
+</details>
+
 ## Others
 
 <details>  
