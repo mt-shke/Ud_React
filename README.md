@@ -1295,9 +1295,110 @@ export const fetchCartData = () => {
 };
 ```
 
-</details>
-Redux DevTools
 
+Redux DevTools
+</details>
+
+
+## 15 - React Router
+
+<details>
+
+<summary>Intro</summary>
+
+npm i react-router-dom
+
+Index - BrowserRouter
+
+```js
+ReactDOM.render(
+	<BrowserRouter>
+		<App />
+	</BrowserRouter>,
+	document.getElementById("root")
+);
+```
+
+App - Redirect , Switch, exact
+
+```js
+<Switch>
+	<Route path="/" exact>
+		<Redirect to="/welcome" />
+	</Route>
+	<Route path="/welcome">
+		<Welcome />
+	</Route>
+	<Route path="/products" exact>
+		<Products />
+	</Route>
+	<Route path="/products/:productId">
+		<ProductDetail />
+	</Route>
+</Switch>
+```
+
+NavLink & activeClassName
+
+```js
+<li>
+						<NavLink activeClassName={classes.active} to="/welcome">
+							Welcome
+						</NavLink>
+					</li>
+					<li>
+						<NavLink activeClassName={classes.active} to="/products">
+							Products
+						</NavLink>
+					</li>
+					<li>
+						<NavLink activeClassName={classes.active} to="/product-detail/:productId">
+							Detail
+						</NavLink>
+					</li>
+
+// Link
+
+<ul>
+	<li>
+		<Link to="/products/p1">A book</Link>
+	</li>
+	<li>
+		<Link to="/products/p2">A carpet</Link>
+	</li>
+	<li>
+		<Link to="/products/p3">A online course</Link>
+	</li>
+</ul>
+```
+
+useParams()
+
+```js
+const params = useParams();
+<p>params.productId</p>
+
+//
+<Route path="/products/:productId">
+
+```
+
+Nested Route
+
+```js
+const Welcome = () => {
+	return (
+		<section>
+			<h1>The Welcome Page</h1>
+			<Route path="/welcome/new-user">
+				<p>Welcome, new user!</p>
+			</Route>
+		</section>
+	);
+};
+```
+
+<details>
 
 
 
