@@ -1398,7 +1398,7 @@ const Welcome = () => {
 };
 ```
 
-<details>
+</details>
 
 
 
