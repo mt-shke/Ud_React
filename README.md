@@ -1295,16 +1295,15 @@ export const fetchCartData = () => {
 };
 ```
 
-
 Redux DevTools
-</details>
 
+</details>
 
 ## 15 - React Router
 
 <details>
 
-<summary>Intro</summary>
+<summary>Route, NavLink, useParams, Nested Route</summary>
 
 npm i react-router-dom
 
@@ -1400,6 +1399,42 @@ const Welcome = () => {
 
 </details>
 
+<details>  
+<summary>History, location, new URLSearchParam, Prompt</summary>
+
+history.push/replace, location, new URLSearchParams
+
+```js
+const history = useHistory();
+const location = useLocation();
+
+const queryParams = new URLSearchParams(location.search);
+const isSortingAscending = queryParams.get("sort") === "asc";
+
+const sortedQuotes = sortQuotes(props.quotes, isSortingAscending);
+
+const changeSortingHandler = () => {
+	history.push({
+		pathname: location.pathname,
+		search: `sort=${isSortingAscending ? "desc" : "asc"}`,
+	});
+};
+
+// 	history.push(`${location.pathname}?sort=${isSortingAscending ? "desc" : "asc"}`);
+// };
+```
+
+prompt
+
+```js
+<Fragment>
+			<Prompt when={isEntering} message={(location) => "Are you sure you want to leave?"} />
+			<Card>
+```
+
+
+
+</details>
 
 
 ## 16 - Deploy React App
