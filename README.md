@@ -1465,25 +1465,350 @@ npm run build
 ```
 
 </details>
+	
+## 17 - Authentication
+
+<details>
+<summary>Managing Authentication with context & firebase</summary>
+
+-auth-context
+ - Create context
+ - Set Token + localStorage
+ - Auto logout & expiration Time
+
+```js
+
+import React, { useState, useEffect, useCallback } from "react";
+
+let logoutTimer;
+
+const AuthContext = React.createContext({
+	token: "",
+	isLoggedIn: false,
+	login: (token) => {},
+	logout: () => {},
+});
+
+const calculateRemainingTime = (expirationTIme) => {
+	const currentTime = new Date().getTime();
+	const adjExpirationTime = new Date(expirationTIme).getTime();
+
+	const remainingDuration = adjExpirationTime - currentTime;
+	return remainingDuration;
+};
+
+const retrieveStoredToken = () => {
+	const storedToken = localStorage.getItem("token");
+	const storedExpirationDate = localStorage.getItem("expirationTime");
+
+	const remainingTime = calculateRemainingTime(storedExpirationDate);
+
+	if (remainingTime <= 60000) {
+		return null;
+	}
+
+	return {
+		token: storedToken,
+		duration: remainingTime,
+	};
+};
+
+export const AuthContextProvider = (props) => {
+	const tokenData = retrieveStoredToken();
+	let initialToken;
+
+	if (tokenData) {
+		initialToken = tokenData.token;
+	}
+
+	const [token, setToken] = useState(initialToken);
+	const userIsLoggedIn = !!token;
+
+	const logoutHandler = useCallback(() => {
+		setToken(null);
+		localStorage.removeItem("token");
+
+		if (logoutTimer) {
+			clearTimeout(logoutTimer);
+		}
+	}, []);
+
+	const loginHandler = (token, expirationTime) => {
+		const remainingTime = calculateRemainingTime(expirationTime);
+		localStorage.setItem("token", token);
+		localStorage.setItem("expirationTime", expirationTime);
+		setToken(token);
+		logoutTimer = setTimeout(logoutHandler, remainingTime);
+	};
+
+	useEffect(() => {
+		if (tokenData) {
+			logoutTimer = setTimeout(logoutHandler, tokenData.duration);
+		}
+	}, [tokenData, logoutHandler]);
+
+	const contextValue = {
+		token: token,
+		isLoggedIn: userIsLoggedIn,
+		login: loginHandler,
+		logout: logoutHandler,
+	};
+
+	return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;
+};
+
+
+```
+
+</details>
+
+<details>
+<summary>Fetching to firebase</summary>
+
+Auth component
+ - SignUp and Login Fetch
+ - Set expiration time
+```js
+
+	const authCtx = useContext(AuthContext);
+
+	const switchAuthModeHandler = () => {
+		setIsLogin((prevState) => !prevState);
+	};
+
+	const submitHandler = (event) => {
+		event.preventDefault();
+
+		const enteredEmail = emailInputRef.current.value;
+		const enteredPassword = passwordInputRef.current.value;
+
+		setIsLoading(true);
+		let url;
+		if (isLogin) {
+			url =
+				"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDxuLREeVmsg7E72bmFzXmaLn5Zqgf6PyA";
+		} else {
+			url =
+				"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDxuLREeVmsg7E72bmFzXmaLn5Zqgf6PyA";
+		}
+		fetch(url, {
+			method: "POST",
+			body: JSON.stringify({
+				email: enteredEmail,
+				password: enteredPassword,
+				returnSecureToken: true,
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((res) => {
+				setIsLoading(false);
+				if (res.ok) {
+					return res.json();
+				} else {
+					return res.json().then((data) => {
+						let errorMessage = " Authentication failed";
+						if (data && data.error && data.error.message) {
+							errorMessage = data.error.message;
+						}
+						throw new Error(errorMessage);
+					});
+				}
+			})
+			.then((data) => {
+				const expirationTIme = new Date(new Date().getTime() + +data.expiresIn * 1000);
+				authCtx.login(data.idToken, expirationTIme.toISOString());
+			})
+			.catch((err) => {
+				alert(err.message);
+			});
+	};
+
+```
+</details>
+
+
+<details>
+<summary>Protecting Front-End Pages with Router</summary>
+
+App
+ - Get Login data and apply Route accordingly
+```js
+
+function App() {
+	const { isLoggedIn } = useContext(AuthContext);
+
+	return (
+		<Layout>
+			<Switch>
+				<Route path="/" exact>
+					<HomePage />
+				</Route>
+				{!isLoggedIn && (
+					<Route path="/auth">
+						<AuthPage />
+					</Route>
+				)}
+
+				{isLoggedIn && (
+					<Route path="/profile">
+						<UserProfile />
+					</Route>
+				)}
+
+				<Route path="*">
+					<Redirect to="/" />
+				</Route>
+			</Switch>
+
+```
+
+</details>
+
+
+## 18 - State Management with React Hooks, No Redux
+
+<details>
+<summary>Managing State with React Hooks</summary>
+
+store
+ - Create store
+ - Custom hook store
+ - Configure wide state in index.js
+ - Load/Set state using useStore hook
+ - Optimize with React.memo & "shouldListen"
+```js
+import { useState, useEffect } from "react";
+
+let globalState = {};
+let listeners = [];
+let actions = {};
+
+export const useStore = (shouldListen = true) => {
+	const setState = useState(globalState)[1];
+
+	const dispatch = (actionIdentifier, payload) => {
+		const newState = actions[actionIdentifier](globalState, payload);
+		globalState = { ...globalState, ...newState };
+
+		for (const listener of listeners) {
+			listener(globalState);
+		}
+	};
+
+	useEffect(() => {
+		if (shouldListen) {
+			listeners.push(setState);
+		}
+		return () => {
+			if (shouldListen) {
+				listeners = listeners.filter((li) => li !== setState);
+			}
+		};
+	}, [setState]);
+
+	return [globalState, dispatch];
+};
+
+export const initStore = (userActions, initialState) => {
+	if (initialState) {
+		globalState = { ...globalState, ...initialState };
+	}
+	actions = { ...actions, ...userActions };
+};
+
+```
+products-store
+```js
+
+import { initStore } from "./store";
+
+const configureStore = () => {
+	const actions = {
+		TOGGLE_FAV: (curState, productId) => {
+			const prodIndex = curState.products.findIndex((p) => p.id === productId);
+			const newFavStatus = !curState.products[prodIndex].isFavorite;
+			const updatedProducts = [...curState.products];
+			updatedProducts[prodIndex] = {
+				...curState.products[prodIndex],
+				isFavorite: newFavStatus,
+			};
+			return { products: updatedProducts };
+		},
+	};
+	initStore(actions, {
+		products: [
+			{
+				id: "p1",
+				title: "Red Scarf",
+				description: "A pretty red scarf.",
+				isFavorite: false,
+            },
+            // data etc
+		],
+	});
+};
+
+export default configureStore;
+
+
+```
+
+index.js
+```js
+
+import configureProductStore from "./components/hooks-store/products-store";
+
+configureProductStore();
+// configureCounterStore(); ex
+
+ReactDOM.render(
+	<BrowserRouter>
+		<App />
+	</BrowserRouter>,
+	document.getElementById("root")
+```
+
+products component
+```js
+import { useStore } from "../components/hooks-store/store";
+const Products = (props) => {
+	const state = useStore()[0];
+
+	return (
+		<ul className="products-list">
+			{state.products.map((prod) => (
+				<ProductItem
+					key={prod.id}
+					id={prod.id}
+                    // ... etc
+
+```
+
+productsItem component
+```js
+const ProductItem = React.memo((props) => {
+	const dispatch = useStore(false)[1];
+
+	const toggleFavHandler = () => {
+		// toggleFav(props.id);
+		dispatch("TOGGLE_FAV", props.id);
+	};
+
+
+```
+
+</details>
+
+	
 
 ## Others
 
 <details>  
-	<summary> Things I've learned </summary>
+	<summary>Plus</summary>
 
-#### Component function Card() {
 
-- const classes = "card " + props.className;
-- return <div className={classes}>{props.children}</div>;
-  }
-
-##### DOM Element onClick
-
-##### const [titleToChange, setNewTitleFunction] = useState('');
-
-setNewTitleFunction('New Title');
-
-##### onAddExpenseData={addExpenseDataHandler}
 
 ##### Lifting State Up
 
