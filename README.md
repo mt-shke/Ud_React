@@ -1801,10 +1801,9 @@ const ProductItem = React.memo((props) => {
 
 </details>
 
+</details>
 	
-<details>
-<summary>19 - Testing React Apps
-</summary>
+## 19 - Testing React Apps
 
 <details>
 <summary>I - Intro
@@ -1867,7 +1866,6 @@ test('renders Hello World as a text', () => {
 ```
 
 
-</details>
 </details>		
 			
 
