@@ -1864,7 +1864,7 @@ test('renders Hello World as a text', () => {
 });
 
 ```
-
+Terminal => npm test
 
 </details>		
 			
