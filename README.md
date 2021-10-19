@@ -1802,6 +1802,74 @@ const ProductItem = React.memo((props) => {
 </details>
 
 	
+<details>
+<summary>19 - Testing React Apps
+</summary>
+
+<details>
+<summary>I - Intro
+</summary>
+
+```
+Manual testing
+-Write Code <> Preview & Test in Browser
+-See what user will see
+
+Automated Testing
+-Code that tests your code
+-You test individual building blocks of your app
+-Technical but test ALL building blocks
+
+
+Unit Tests
+-Test individual building blocks => Project contains +dozens/hundreds 
+
+Integration Tests
+-Test combination of multiple blocks => Project contains a few
+
+End to End
+-Test complete scenarios of UX => Project contains a few
+-Can be done manually
+
+---
+
+Tool for test and => Jest
+Tool for simulating => React Testing Library
+
+```
+</details>
+
+
+<details>
+<summary>II - Arrange, Act, Assert
+</summary>
+
+Greeting.test.js
+```js
+
+import Greeting from './Greeting'
+import {render, screen} from '@testing-library/react'
+
+test('renders Hello World as a text', () => {
+
+// Arrange
+    render(<Greeting />);
+
+    // Act
+    // ... 
+
+    // Assert
+    const helloWorldElement = screen.getByText('Hello World', {exact: false});
+    // const helloWorldElement = screen.getByText('Hello World');
+    expect(helloWorldElement).toBeInTheDocument();
+});
+
+```
+
+
+</details>
+</details>		
+			
 
 ## Others
 
