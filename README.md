@@ -1895,6 +1895,25 @@ describe("Async component", () => {
 
 </details>
 
+	
+## 20 - TypeScript in React
+
+<details>
+<summary>Generic & FunctionComponent</summary>
+
+```ts
+
+function insertAtBeggining<T>(array: T[], value: T) {
+
+
+const Todos: React.FC<{ items: string[] }> = (props) => {
+
+```
+
+</details>
+
+	
+	
 ## Others
 
 <details>  
