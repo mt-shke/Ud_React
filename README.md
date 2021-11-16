@@ -1912,6 +1912,291 @@ const Todos: React.FC<{ items: string[] }> = (props) => {
 
 </details>
 
+## 21 - Next js
+
+<details>
+<summary>Next js - Start </summary>
+
+```bash
+npx create-next-app
+npm run dev
+
+```
+
+</details>
+
+<details>
+
+<summary> Pages routing</summary>
+
+- pages > news > index.js
+- pages > news > news.js
+- pages > news > [newsId].js
+
+```js
+
+<Link href='/'>
+
+```
+
+</details>
+
+<details>
+
+<summary> getData : getStaticProps - getServerSideProps - getStaticPaths</summary>
+
+```js
+function HomePage(props) {
+	return <MeetupList meetups={props.meetups} />;
+}
+```
+
+getStaticProps
+
+```js
+// pregenerate html file stored served by cdn => faster
+export async function getStaticProps() {
+	// fetch data from an API
+	return {
+		props: {
+			meetups: DUMMY_MEETUPS,
+		},
+		revalidate: 600,
+	};
+}
+```
+
+getServerSideProps
+
+```js
+// need access to concrete object
+// data changing every seconds
+export async function getServerSideProps(context) {
+	const req = context.req;
+	const res = context.res;
+	// fetch data from an API
+	return {
+		props: {
+			meetups: DUMMY_MEETUPS,
+		},
+	};
+}
+```
+
+getStaticPaths
+
+```js
+export function getStaticPaths() {
+	return {
+		fallback: false,
+		// declare if there are others paths than the ones below
+		paths: [
+			{
+				params: {
+					meetupId: "m1",
+				},
+			},
+			{
+				params: {
+					meetupId: "m2",
+				},
+			},
+		],
+	};
+}
+```
+
+</details>
+
+<details>
+
+<summary>MongoDB</summary>
+
+npm i mongodb
+
+```js
+function NewMeetupPage() {
+	const addMeetupHandler = async (enteredMeetupData) => {
+		try {
+			const response = await fetch("/api/new-meetup", {
+				method: "POST",
+				body: JSON.stringify(enteredMeetupData),
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			if (!response.ok) throw new Error((err) => console.error(err.message));
+			const data = await response.json();
+
+			console.log(data);
+		} catch (err) {
+			console.error(err.message);
+		}
+	};
+
+	return <NewMeetupForm onAddMeetup={addMeetupHandler} />;
+}
+```
+
+api/new-meetup
+
+```js
+async function handler(req, res) {
+	try {
+		if (req.method === "POST") {
+			const data = req.body;
+			const client = await MongoClient.connect(
+				"mongodb+srv://mongo:mymongo@cluster0.chfbj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+			);
+			const db = client.db();
+			const meetupsCollection = db.collection("meetups");
+
+			const result = await meetupsCollection.insertOne(data);
+			console.log(result);
+
+			client.close();
+			res.status(201).json({ message: "Data Meetup inserted!" });
+		}
+	} catch (err) {
+		console.log(err.message);
+	}
+}
+
+export default handler;
+```
+
+</details>
+
+<details>
+<summary>Fetching data from Mongo - getStaticPaths, getStaticProps</summary>
+
+new-meetup.js
+
+```js
+function MeetupDetail(props) {
+	return (
+		<MeetupDetails
+			image={props.meetupData.image}
+			title={props.meetupData.title}
+			address={props.meetupData.address}
+			description={props.meetupData.description}
+		/>
+	);
+}
+
+export async function getStaticPaths() {
+	const client = await MongoClient.connect(
+		"mongodb+srv://mongo:mymongo@cluster0.chfbj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+	);
+	const db = client.db();
+	const meetupsCollection = db.collection("meetups");
+	const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
+	// meetupsCollection.find({filterCriteria}, {searchTarget})
+
+	return {
+		fallback: "blocking",
+		// declare if there are others paths than the ones below
+		paths: meetups.map((meetup) => ({ params: { meetupId: meetup._id.toString() } })),
+	};
+}
+
+export async function getStaticProps(context) {
+	const meetupId = context.params.meetupId;
+
+	const client = await MongoClient.connect(
+		"mongodb+srv://mongo:mymongo@cluster0.chfbj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+	);
+	const db = client.db();
+	const meetupsCollection = db.collection("meetups");
+
+	const selectedMeetup = await meetupsCollection.findOne({ _id: ObjectId(meetupId) });
+
+	client.close();
+
+	return {
+		props: {
+			meetupData: {
+				id: selectedMeetup._id.toString(),
+				title: selectedMeetup.title,
+				image: selectedMeetup.image,
+				address: selectedMeetup.address,
+				description: selectedMeetup.description,
+			},
+		},
+	};
+}
+```
+
+</details>
+<details>
+<summary>Head</summary>
+
+```js
+import Head from "next/head";
+function MeetupDetail(props) {
+	return (
+		<Fragment>
+			<Head>
+				<title>{props.meetupData.title}</title>
+				<meta name={props.meetupData.title} description={props.meetupData.description} />
+			</Head>
+			<MeetupDetails
+				image={props.meetupData.image}
+				title={props.meetupData.title}
+				address={props.meetupData.address}
+				description={props.meetupData.description}
+			/>
+		</Fragment>
+	);
+}
+```
+
+</details>
+
+<details>
+<summary>Deploy - fallback</summary>
+
+```js
+fallback: 'blocking',
+
+```
+
+</details>
+
+Next js
+
+- pages routing
+- dynamic pages
+- pre rendered pages: fetching data, getStaticProps, getServerSideProps
+- static page : getStaticPaths
+- connecting to API routes, + own API client routes
+
+## 22 - Animations
+
+<details>
+<summary>React Transition Group</summary>
+
+```js
+
+```
+
+</details>
+<details>
+<summary>CSSTransition</summary>
+import CSSTransition from '.....'
+
+```js
+classNames='fade-slide'
+// or
+classNames={{enter:'',
+enterActive: 'ModalOpen',
+exit: '',
+exitActive: 'ModalClosed',}}
+
+```
+
+</details>
+
 	
 	
 ## Others
