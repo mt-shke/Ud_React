@@ -1913,8 +1913,10 @@ const Todos: React.FC<{ items: string[] }> = (props) => {
 </details>
 
 ## 21 - Next js
-
+ 
+	
 <details>
+	
 <summary>Next js - Start </summary>
 
 ```bash
@@ -2171,6 +2173,121 @@ Next js
 - static page : getStaticPaths
 - connecting to API routes, + own API client routes
 
+	
+## 21 - bis - Next Js
+		
+	<details>
+	<summary>Env - lib/mongodb.js
+	</summary>
+	
+```js
+MONGODB_URI=mongodb+srv://mongo:mymongopass@cluster0.chfbj.mongodb.net/project?retryWrites=true&w=majority
+
+```
+
+```js
+import { MongoClient } from "mongodb";
+
+const uri = process.env.MONGODB_URI;
+const options = {
+	useUnifiedTopology: true,
+	useNewUrlParser: true,
+};
+
+let client;
+let clientPromise;
+
+if (!process.env.MONGODB_URI) {
+	throw new Error("Please add your Mongo URI to .env.local");
+}
+
+if (process.env.NODE_ENV === "development") {
+	if (!global._mongoClientPromise) {
+		client = new MongoClient(uri, options);
+		global._mongoClientPromise = client.connect();
+	}
+	clientPromise = global._mongoClientPromise;
+} else {
+	client = new MongoClient(uri, options);
+	clientPromise = client.connect();
+}
+
+export default clientPromise;
+```
+
+</details>
+<details>
+<summary>Api - Dynamics routes
+</summary>
+
+```js
+import clientPromise from "../../lib/mongodb";
+import { ObjectId } from "mongodb";
+
+export default async function handler(req, res) {
+	const query = req.query.movie_id;
+
+	console.log(query);
+	const client = await clientPromise;
+	const db = client.db("sample_mflix");
+
+	const data = await db.collection("movies").findOne({ _id: new ObjectId(query) });
+	// new ObjectId => wrap
+
+	res.json(data);
+}
+```
+
+</details>
+
+<details>
+<summary>[DetailsPage].js - getServerSideProps
+</summary>
+
+```js
+export async function getServerSideProps(context) {
+	// const client = await clientPromise;
+	// const db = client.db("sample_mflix");
+	// const moviesJson = await db.collection("movies").find({}).limit(20).toArray();
+	// const movies = JSON.parse(JSON.stringify(moviesJson));
+
+	const resp = await fetch(`http://localhost:3000/api/moviedetails?movie_id=${context.query.movie_id}`);
+	const data = await resp.json();
+
+	return {
+		props: { movie: data },
+	};
+}
+```
+
+</details>
+<details>
+<summary>getStaticProps - Paths
+</summary>
+
+```js
+export async function getStaticPaths() {
+	return {
+		paths: ["/573a1390f29313caabcd4803"],
+		fallback: false,
+	};
+}
+
+export async function getStaticProps({ params }) {
+	console.log(params);
+	const resp = await fetch(`http://localhost:3000/api/moviedetails?movie_id=${params.movie_id}`);
+	const data = await resp.json();
+
+	return {
+		props: { movie: data },
+		revalidate: 1,
+	};
+}
+```
+
+</details>
+
+	
 ## 22 - Animations
 
 <details>
