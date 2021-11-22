@@ -2174,12 +2174,11 @@ Next js
 - connecting to API routes, + own API client routes
 
 	
-## 21 - bis - Next Js
-		
-	<details>
-	<summary>Env - lib/mongodb.js
-	</summary>
-	
+## 21 - Bis - Next Js
+
+ <details> 
+ <summary>Env - lib/mongodb.js </summary>
+ 	
 ```js
 MONGODB_URI=mongodb+srv://mongo:mymongopass@cluster0.chfbj.mongodb.net/project?retryWrites=true&w=majority
 
