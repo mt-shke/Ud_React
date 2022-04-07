@@ -2329,3 +2329,139 @@ exitActive: 'ModalClosed',}}
 ##### Rendering Content Under Certain Conditions
 
 </details>
+	
+	
+## OC - React
+
+<details>
+<summary>Testing</summary>
+
+```js
+// yarn test -- --coverage
+// display the % covered of your test
+
+// !test hook, => test component === test hook
+```
+
+button & theme
+```js
+
+describe('Footer', () => {
+  it('should render the footer', () => {
+    render(
+      <ThemeProvider>
+        <Footer />
+      </ThemeProvider>
+    )
+
+    const nightModeButton = screen.getByRole('button')
+    expect(nightModeButton.textContent).toBe('Changer de mode : ☀️')
+
+    fireEvent.click(nightModeButton)
+    expect(nightModeButton.textContent).toBe('Changer de mode : 🌙')
+  })
+})
+
+```
+
+
+text, debug, getByText, getByRole
+```js
+
+describe('The Home component', () => {
+  it('should render title', () => {
+    render(
+      <MemoryRouter>
+        <ThemeProvider>
+          <Home />
+        </ThemeProvider>
+      </MemoryRouter>
+    )
+
+    // screen.debug()
+    // display component (use when you don't remember)
+
+
+    // expect(
+    //   screen.getByText(
+    //     'Repérez vos besoins, on s’occupe du reste, avec les meilleurs talents'
+    //   )
+    // ).toBeTruthy()
+
+    expect(
+      screen.getByRole('heading', {
+        level: 2,
+        text:
+          'Repérez vos besoins, on s’occupe du reste, avec les meilleurs talents',
+      })
+    ).toBeTruthy()
+  })
+})
+
+```
+
+
+
+</details>
+
+
+<details>
+<summary>class component</summary>
+
+```js
+
+class EmailInput extends Component {
+  constructor(props) {
+    // L'autre manière de binder de manière explicite votre fonction au this
+    // this.updateInputValue =this.updateInputValue.bind(this)
+    super(props)
+    this.state = {
+      inputValue: '',
+    }
+  }
+
+  updateInputValue(value) {
+    this.setState({ inputValue: value })
+  }
+
+  componentDidMount() {}
+
+  componentDidUpdate() {}
+  
+  componentWillUnmount() {}
+
+  render() {
+    const { theme } = this.props
+
+    return (
+      <InputWrapper theme={theme}>
+        <StyledLabel theme={theme}>Adresse Email</StyledLabel>
+        <StyledInput
+          theme={theme}
+          onChange={(e) => this.updateInputValue(e.target.value)}
+        />
+        {this.state.inputValue}
+      </InputWrapper>
+    )
+  }
+}
+```
+
+
+```js
+// Les composants classe sont apparus en même temps que les class  en JavaScript. 
+// Un composant classe est déclaré avec  class NomDuComposant extends Component   .
+// render  est appelé à chaque fois qu’une mise à jour a lieu.
+// Le state est mis à jour avec setState  , auquel on passe un objet en paramètre.
+// On accède aux props et au state avec this.props  et this.state  .
+```
+
+
+```js
+// Entre le moment où il est monté dans le DOM et le moment où il en est retiré, un composant passe par différentes étapes.
+// Les méthodes de cycle de vie auxquelles on accède depuis les composants classe permettent d'exécuter notre code à des moments précis qui correspondent à ces étapes.
+// componentDidMount()  est la méthode privilégiée pour lancer un appel API.
+```
+
+
+</details>
